@@ -9,6 +9,11 @@ services:
       - ../src:/var/www/html
     ports:
       - "8080:80"
+    environment:
+      DB_HOST: database
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
     restart: always
     depends_on:
       - database

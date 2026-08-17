@@ -12,27 +12,35 @@ class Config
 
     /**
      * Database host
-     * @var string
      */
-    const DB_HOST = 'localhost';
+    public static function dbHost(): string
+    {
+        return getenv('DB_HOST') ?: 'localhost';
+    }
 
     /**
      * Database name
-     * @var string
      */
-    const DB_NAME = 'videgrenierenligne';
+    public static function dbName(): string
+    {
+        return getenv('DB_NAME') ?: 'videgrenierenligne';
+    }
 
     /**
      * Database user
-     * @var string
      */
-    const DB_USER = 'webapplication';
+    public static function dbUser(): string
+    {
+        return getenv('DB_USER') ?: 'webapplication';
+    }
 
     /**
      * Database password
-     * @var string
      */
-    const DB_PASSWORD = '653rag9T';
+    public static function dbPassword(): string
+    {
+        return getenv('DB_PASSWORD') ?: '';
+    }
 
     /**
      * Show or hide error messages on screen
