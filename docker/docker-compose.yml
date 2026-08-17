@@ -24,6 +24,7 @@ services:
     image: mariadb:lts-ubi9
     volumes:
       - ./database:/var/lib/mysql
+      - ../src/sql/import.sql:/docker-entrypoint-initdb.d/import.sql:ro
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
