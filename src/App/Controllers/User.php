@@ -5,8 +5,8 @@ namespace App\Controllers;
 use App\Config;
 use App\Model\UserRegister;
 use App\Models\Articles;
+use App\Utility\Flash;
 use App\Utility\Hash;
-use App\Utility\Session;
 use \Core\View;
 use Exception;
 use http\Env\Request;
@@ -26,12 +26,12 @@ class User extends \Core\Controller
         if(isset($_POST['submit'])){
             $f = $_POST;
 
-            // TODO: Validation
+            if($this->login($f)){
+                header('Location: /account');
+                die;
+            }
 
-            $this->login($f);
-
-            // Si login OK, redirige vers le compte
-            header('Location: /account');
+            Flash::danger("Email ou mot de passe incorrect.");
         }
 
         View::renderTemplate('User/login.html');
@@ -46,13 +46,24 @@ class User extends \Core\Controller
             $f = $_POST;
 
             if($f['password'] !== $f['password-check']){
-                // TODO: Gestion d'erreur côté utilisateur
+                Flash::danger("Les mots de passe ne correspondent pas.");
+                View::renderTemplate('User/register.html');
+                die;
             }
 
-            // validation
+            if($this->register($f)){
+                // Connecte automatiquement l'utilisateur après la création de son compte
+                if($this->login($f)){
+                    header('Location: /account');
+                    die;
+                }
 
-            $this->register($f);
-            // TODO: Rappeler la fonction de login pour connecter l'utilisateur
+                // Le compte est créé mais l'auto-connexion a échoué : direction la page de login
+                header('Location: /login');
+                die;
+            }
+
+            Flash::danger("Une erreur est survenue lors de la création du compte.");
         }
 
         View::renderTemplate('User/register.html');
@@ -90,20 +101,21 @@ class User extends \Core\Controller
             return $userID;
 
         } catch (Exception $ex) {
-            // TODO : Set flash if error : utiliser la fonction en dessous
-            /* Utility\Flash::danger($ex->getMessage());*/
+            Flash::danger($ex->getMessage());
+            return false;
         }
     }
 
     private function login($data){
         try {
-            if(!isset($data['email'])){
-                throw new Exception('TODO');
+            if(empty($data['email']) || empty($data['password'])){
+                return false;
             }
+
 
             $user = \App\Models\User::getByLogin($data['email']);
 
-            if (Hash::generate($data['password'], $user['salt']) !== $user['password']) {
+            if (!$user || Hash::generate($data['password'], $user['salt']) !== $user['password']) {
                 return false;
             }
 
@@ -119,8 +131,8 @@ class User extends \Core\Controller
             return true;
 
         } catch (Exception $ex) {
-            // TODO : Set flash if error
-            /* Utility\Flash::danger($ex->getMessage());*/
+            Flash::danger($ex->getMessage());
+            return false;
         }
     }
 
