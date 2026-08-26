@@ -14,6 +14,13 @@ abstract class Model
 {
 
     /**
+     * Connexion PDO injectée pour les tests, à la place de la vraie base MySQL
+     *
+     * @var PDO|null
+     */
+    private static $testDB = null;
+
+    /**
      * Get the PDO database connection
      *
      * @return mixed
@@ -21,6 +28,10 @@ abstract class Model
     protected static function getDB()
     {
         static $db = null;
+
+        if (static::$testDB !== null) {
+            return static::$testDB;
+        }
 
         if ($db === null) {
             $dsn = 'mysql:host=' . Config::dbHost() . ';dbname=' . Config::dbName() . ';charset=utf8';
@@ -31,5 +42,17 @@ abstract class Model
         }
 
         return $db;
+    }
+
+    /**
+     * Remplace la connexion à la base par celle fournie (utilisé par les tests).
+     * Appeler avec null pour revenir à la vraie connexion.
+     *
+     * @param PDO|null $db
+     * @return void
+     */
+    public static function setTestDB(?PDO $db): void
+    {
+        static::$testDB = $db;
     }
 }

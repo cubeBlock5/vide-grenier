@@ -13,6 +13,16 @@ Ce Readme.md est à destination des futurs repreneurs du site-web Vide Grenier e
 1. Lancez la commande `npm install` pour installer node-sass
 2. Lancez la commande `npm run watch` pour compiler les fichiers SCSS
 
+## Tests
+
+Les tests unitaires (PHPUnit) se lancent depuis ce dossier (`src/`) :
+
+```bash
+vendor/bin/phpunit
+```
+
+Les modèles (`App/Models`) sont testés sans toucher à la vraie base MySQL : `Core\Model::setTestDB($pdo)` permet d'injecter une connexion PDO SQLite en mémoire à la place de la vraie connexion pendant les tests.
+
 ## Routing
 
 Le [Router](Core/Router.php) traduit les URLs. 
