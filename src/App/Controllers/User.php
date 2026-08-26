@@ -52,13 +52,6 @@ class User extends \Core\Controller
             }
 
             if($this->register($f)){
-                // Connecte automatiquement l'utilisateur après la création de son compte
-                if($this->login($f)){
-                    header('Location: /account');
-                    die;
-                }
-
-                // Le compte est créé mais l'auto-connexion a échoué : direction la page de login
                 header('Location: /login');
                 die;
             }
