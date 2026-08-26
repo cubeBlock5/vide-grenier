@@ -23,6 +23,18 @@ vendor/bin/phpunit
 
 Les modèles (`App/Models`) sont testés sans toucher à la vraie base MySQL : `Core\Model::setTestDB($pdo)` permet d'injecter une connexion PDO SQLite en mémoire à la place de la vraie connexion pendant les tests.
 
+## Documentation de l'API
+
+Les endpoints JSON exposés par [Api.php](App/Controllers/Api.php) sont documentés au format OpenAPI grâce à des attributs PHP (`#[OA\Get(...)]`) directement dans le contrôleur, via [zircote/swagger-php](https://github.com/zircote/swagger-php).
+
+Le fichier `public/openapi.json` est **généré automatiquement** (jamais à modifier à la main) :
+- à chaque `composer install` / `composer update` (hook `post-autoload-dump`)
+- ou manuellement avec `composer openapi`
+
+Une fois le projet lancé, la doc interactive (Swagger UI) est accessible sur `/api-docs/`.
+
+Pour documenter un nouvel endpoint, ajoutez un attribut `#[OA\Get]`/`#[OA\Post]`/... au-dessus de l'action concernée dans un contrôleur, puis relancez `composer openapi`.
+
 ## Routing
 
 Le [Router](Core/Router.php) traduit les URLs. 
