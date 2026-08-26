@@ -69,3 +69,4 @@ Temporary Items
 src/public/storage/
 src/logs/*.log
 src/logs/*.txt
+src/.phpunit.cache
