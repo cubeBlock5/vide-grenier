@@ -22,7 +22,7 @@ class Api extends \Core\Controller
     {
         $query = $_GET['sort'];
 
-        $articles = Articles::getAll($query);
+        $articles = $this->getProducts($query);
 
         header('Content-Type: application/json');
         echo json_encode($articles);
@@ -35,9 +35,31 @@ class Api extends \Core\Controller
      */
     public function CitiesAction(){
 
-        $cities = Cities::search($_GET['query']);
+        $cities = $this->searchCities($_GET['query']);
 
         header('Content-Type: application/json');
         echo json_encode($cities);
+    }
+
+    /**
+     * Récupère la liste des articles triée selon $sort.
+     *
+     * @param string $sort
+     * @return array
+     */
+    protected function getProducts(string $sort): array
+    {
+        return Articles::getAll($sort);
+    }
+
+    /**
+     * Recherche les villes correspondant à $query.
+     *
+     * @param string $query
+     * @return array
+     */
+    protected function searchCities(string $query): array
+    {
+        return Cities::search($query);
     }
 }

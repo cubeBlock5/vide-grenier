@@ -84,7 +84,7 @@ class User extends \Core\Controller
     /*
      * Fonction privée pour enregister un utilisateur
      */
-    private function register($data)
+    protected function register($data)
     {
         try {
             // Generate a salt, which will be applied to the during the password
@@ -106,7 +106,7 @@ class User extends \Core\Controller
         }
     }
 
-    private function login($data){
+    protected function login($data){
         try {
             if(empty($data['email']) || empty($data['password'])){
                 return false;
