@@ -131,7 +131,6 @@ class User extends \Core\Controller
             // navigateur) afin que l'utilisateur reste connecté.
             if (!empty($data['remember'])) {
                 $duration = 60 * 60 * 24 * 30; // 30 jours
-                ini_set('session.gc_maxlifetime', $duration);
                 $params = session_get_cookie_params();
                 setcookie(session_name(), session_id(), time() + $duration,
                     $params['path'], $params['domain'],
