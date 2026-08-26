@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+
+<div class="content-wrapper single-article mt-40">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 col-xs-12 col-sm-12">
+                <h1>Contacter {{ article.username }}</h1>
+                <p>À propos de l'annonce « {{ article.name }} »</p>
+
+                {% if flash_danger is not null %}
+                <div class="alert alert-danger" role="alert">
+                    {{ flash_danger }}
+                </div>
+                {% endif %}
+
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="name">Votre nom</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               value="{{ user is not null ? user.username : '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Votre email</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               placeholder="sample@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="6"></textarea>
+                    </div>
+                    <button type="submit" name="submit" class="btn btn-primary u-btn">Envoyer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
