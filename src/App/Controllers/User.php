@@ -119,16 +119,25 @@ class User extends \Core\Controller
                 return false;
             }
 
-            // TODO: Create a remember me cookie if the user has selected the option
-            // to remained logged in on the login form.
-            // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L86
-
             session_regenerate_id(true);
 
             $_SESSION['user'] = array(
                 'id' => $user['id'],
                 'username' => $user['username'],
             );
+
+            // Si "Se souvenir de moi" est coché, on prolonge la durée de vie du
+            // cookie de session (par défaut, il expire à la fermeture du
+            // navigateur) afin que l'utilisateur reste connecté.
+            if (!empty($data['remember'])) {
+                $duration = 60 * 60 * 24 * 30; // 30 jours
+                ini_set('session.gc_maxlifetime', $duration);
+                $params = session_get_cookie_params();
+                setcookie(session_name(), session_id(), time() + $duration,
+                    $params['path'], $params['domain'],
+                    $params['secure'], $params['httponly']
+                );
+            }
 
             return true;
 
@@ -148,11 +157,6 @@ class User extends \Core\Controller
      */
     public function logoutAction() {
 
-        /*
-        if (isset($_COOKIE[$cookie])){
-            // TODO: Delete the users remember me cookie if one has been stored.
-            // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L148
-        }*/
         // Destroy all data registered to the session.
 
         $_SESSION = array();
