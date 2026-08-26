@@ -37,9 +37,12 @@ class Product extends \Core\Controller
                 $product['user_id'] = $_SESSION['user']['id'];
                 $id = Articles::save($product);
 
-                $pictureName = Upload::uploadFile($_FILES['picture'], $id);
+                $pictureError = $_FILES['picture']['error'] ?? UPLOAD_ERR_NO_FILE;
 
-                Articles::attachPicture($id, $pictureName);
+                if ($pictureError !== UPLOAD_ERR_NO_FILE) {
+                    $pictureName = Upload::uploadFile($_FILES['picture'], $id);
+                    Articles::attachPicture($id, $pictureName);
+                }
 
                 header('Location: /product/' . $id);
             } catch (\Exception $e){
@@ -69,7 +72,7 @@ class Product extends \Core\Controller
 
         $pictureError = $files['picture']['error'] ?? UPLOAD_ERR_NO_FILE;
 
-        if ($pictureError !== UPLOAD_ERR_OK) {
+        if ($pictureError !== UPLOAD_ERR_OK && $pictureError !== UPLOAD_ERR_NO_FILE) {
             return $this->pictureErrorMessage($pictureError);
         }
 
@@ -85,8 +88,6 @@ class Product extends \Core\Controller
     protected function pictureErrorMessage(int $errorCode): string
     {
         switch ($errorCode) {
-            case UPLOAD_ERR_NO_FILE:
-                return "Veuillez ajouter une photo !";
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
                 return "Le fichier est trop volumineux (" . ini_get('upload_max_filesize') . " maximum).";

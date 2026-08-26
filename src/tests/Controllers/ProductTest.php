@@ -74,25 +74,19 @@ class ProductTest extends TestCase
         );
     }
 
-    public function testValidateProductSubmissionRejectsMissingFile(): void
+    public function testValidateProductSubmissionAcceptsMissingFile(): void
     {
         $product = ['name' => 'Vélo', 'description' => 'Bon état'];
 
-        $this->assertSame(
-            "Veuillez ajouter une photo !",
-            $this->product->callValidateProductSubmission($product, [])
-        );
+        $this->assertNull($this->product->callValidateProductSubmission($product, []));
     }
 
-    public function testValidateProductSubmissionRejectsUploadErrNoFile(): void
+    public function testValidateProductSubmissionAcceptsUploadErrNoFile(): void
     {
         $product = ['name' => 'Vélo', 'description' => 'Bon état'];
         $files = ['picture' => ['error' => UPLOAD_ERR_NO_FILE]];
 
-        $this->assertSame(
-            "Veuillez ajouter une photo !",
-            $this->product->callValidateProductSubmission($product, $files)
-        );
+        $this->assertNull($this->product->callValidateProductSubmission($product, $files));
     }
 
     public function testValidateProductSubmissionRejectsUploadErrIniSize(): void
@@ -125,14 +119,6 @@ class ProductTest extends TestCase
         $this->assertSame(
             "Une erreur est survenue lors de l'envoi du fichier.",
             $this->product->callValidateProductSubmission($product, $files)
-        );
-    }
-
-    public function testPictureErrorMessageForNoFile(): void
-    {
-        $this->assertSame(
-            "Veuillez ajouter une photo !",
-            $this->product->callPictureErrorMessage(UPLOAD_ERR_NO_FILE)
         );
     }
 
