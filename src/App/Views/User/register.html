@@ -7,7 +7,7 @@
     <div class="row">
         <div class="login-wraper">
             <div class="hidden-xs">
-                <img src="images/login.jpg" alt="">
+                <img src="/images/account.jpg" alt="">
             </div>
             <div class="banner-text hidden-xs">
                 <div class="line"></div>
@@ -24,6 +24,11 @@
                     Créer un compte
                 </div>
                 <div class="l-form">
+                    {% if flash_danger is not null %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ flash_danger }}
+                    </div>
+                    {% endif %}
                     <form method="post" action="">
                         <div class="form-group">
                             <label for="username">Nom d'utilisateur</label>
@@ -50,7 +55,7 @@
                             </button></div>
                             <div class="hidden-xs">
                                 <div class="col-lg-1 ortext">ou</div>
-                                <div class="col-lg-4 signuptext"><a href="login.html">Connexion</a></div>
+                                <div class="col-lg-4 signuptext"><a href="/login">Connexion</a></div>
                             </div>
                         </div>
                         <div class="visible-xs text-center mt-30">

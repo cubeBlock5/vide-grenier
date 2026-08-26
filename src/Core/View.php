@@ -63,6 +63,11 @@ class View
 
         $args["user"] = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
+        $args["flash_danger"] = \App\Utility\Flash::danger();
+        $args["flash_info"] = \App\Utility\Flash::info();
+        $args["flash_success"] = \App\Utility\Flash::success();
+        $args["flash_warning"] = \App\Utility\Flash::warning();
+
         return $args;
     }
 }
