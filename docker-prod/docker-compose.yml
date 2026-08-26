@@ -1,0 +1,40 @@
+services:
+  web-prod:
+    container_name: web_prod
+    image: web-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    environment:
+      DB_HOST: database-prod
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+    restart: always
+    depends_on:
+      - database-prod
+    networks:
+      - private-network-prod
+
+  database-prod:
+    container_name: database_prod
+    image: mariadb:lts-ubi9
+    volumes:
+      - db-data-prod:/var/lib/mysql
+      - ./sql/import.sql:/docker-entrypoint-initdb.d/import.sql:ro
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    restart: always
+    networks:
+      - private-network-prod
+
+volumes:
+  db-data-prod:
+
+networks:
+  private-network-prod:
