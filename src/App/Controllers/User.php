@@ -123,6 +123,8 @@ class User extends \Core\Controller
             // to remained logged in on the login form.
             // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L86
 
+            session_regenerate_id(true);
+
             $_SESSION['user'] = array(
                 'id' => $user['id'],
                 'username' => $user['username'],
