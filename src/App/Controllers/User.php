@@ -52,6 +52,13 @@ class User extends \Core\Controller
             }
 
             if($this->register($f)){
+                // Connecte automatiquement l'utilisateur après la création de son compte
+                if($this->login($f)){
+                    header('Location: /account');
+                    die;
+                }
+
+                // Le compte est créé mais l'auto-connexion a échoué : direction la page de login
                 header('Location: /login');
                 die;
             }
@@ -115,6 +122,8 @@ class User extends \Core\Controller
             // TODO: Create a remember me cookie if the user has selected the option
             // to remained logged in on the login form.
             // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L86
+
+            session_regenerate_id(true);
 
             $_SESSION['user'] = array(
                 'id' => $user['id'],
