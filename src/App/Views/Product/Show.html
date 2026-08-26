@@ -8,6 +8,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-xs-12 col-sm-12">
+                {% if flash_success is not null %}
+                <div class="alert alert-success" role="alert">
+                    {{ flash_success }}
+                </div>
+                {% endif %}
                 <div class="preview-article">
                     <img
                             src="{{ ('/storage/' ~ article.picture) }}"/>
@@ -38,7 +43,7 @@
                     </div>
                     <div class="u-area mt-small">
 
-                    <a name="submit" href="mailto:{{article.email}}" class="btn btn-primary u-btn">Contacter {{article
+                    <a name="submit" href="{{ ('/product/' ~ id ~ '/contact') }}" class="btn btn-primary u-btn">Contacter {{article
                         .username}}</a>
 
                     </div>

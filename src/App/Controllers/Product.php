@@ -89,6 +89,7 @@ class Product extends \Core\Controller
         }
 
         View::renderTemplate('Product/Show.html', [
+            'id' => $id,
             'article' => $article[0],
             'suggestions' => $suggestions
         ]);
